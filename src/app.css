@@ -87,4 +87,16 @@
   height: 80vh;
   text-align: center;
   border-radius: 35px;
+  color: white;
+}
+.container h4 {
+    font-size: 2rem;
+}
+
+.btn {
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    float: right;
+    cursor: pointer;
 }

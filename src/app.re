@@ -1,43 +1,55 @@
-
-
-
-
-/* https://reasonml.chat/t/cant-apply-interface-because-it-is-unbound/357/2 */
-
-
-
-/* Define State */
-
+type item = {
+  title: string,
+  completed: bool
+}
 
 type state = {
-    /* items: list(TodoType.todo), */
-    inputText: string,
-};
+  items: list(item),
+}
 
-type action =
-  | InputText(string)
-  | Toggle(int)
-  | RemoveItem(int)
-  | Submit;
+type action = 
+  | AddItem
+
+let newItem = () => { title: "Clicked a Button", completed: true };
 
 
-  let component = ReasonReact.statelessComponent("App");
 
+let string = ReasonReact.string;
 
-let make = (_children) => {
-        /* let handleSubmit = state => {
-            let newId: int = List.length(state.items);
-        }; */
-    {
-        ...component,
-            render: _self => {
-                let title = <h2 className="header" >(ReasonReact.string("Reason Todo"))</h2>;
-                <div className="container" >
-                (title)
-                <input className="search__input" placeholder="Add Todo"
-                onChange=(e => Js.log(e) )
-                />
-                </div>;
-            },
+let component = ReasonReact.reducerComponent("Todo");
+
+let make = ( _children) => {
+     ...component,
+      initialState: () => {
+        items: [
+          { title: "Write something to do ", completed: false },
+        ],
+      },
+        reducer: (action, state) => {
+            switch action {
+            | AddItem => ReasonReact.Update({ items: [newItem() , ...state.items]})
+            }
+        },
+
+        render: (self) => {
+          let title = <h2 className="header" >(string("ReasonML! Todo"))</h2>;
+          let numItems = List.length(self.state.items);
+        <div>
+          <div className="container" >
+            (title)
+            <button className="btn" onClick=((e) =>self.send(AddItem)) >
+              (string("Add Something"))
+            </button>
+            <input placeholder="Enter todo..." className="search__input"
+            />
+            <div className="items" >
+              <h4>(string("No Todo"))</h4>
+              </div>
+              <div className="footer" >
+              <h3>(string(string_of_int(numItems) ++ " Items"))</h3>
+             </div>
+          </div>
+        </div>;
         }
-    }
+
+}
